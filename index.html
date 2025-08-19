@@ -74,20 +74,20 @@
   <div class="wrap">
     <div class="card">
       <header>
-        <div class="row" style="justify-content:space-between">
-          <div class="logo">
-            <!-- Escalas de la justicia -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 3v3m-6 2 3 6H3l3-6Zm12 0 3 6h-6l3-6ZM5 20h14M12 6c3 0 5 2 5 5v9M12 6C9 6 7 8 7 11v9" stroke="#0b3b6f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <strong style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif; font-size:1.05rem">Estudio Jurídico</strong>
-          </div>
-          <span class="badge"><span class="dot"></span> Atención prioritaria</span>
-        </div>
-        <h1>Formulario de Consulta Jurídica</h1>
-        <p class="sub">Complete el formulario y le contactaremos a la brevedad por el medio indicado. <span class="muted">Tiempo estimado: 1–2 minutos.</span></p>
-      </header>
-
+  <div class="row" style="justify-content:space-between">
+    <div class="logo">
+      <img src="./logo.png" alt="Logo Estudio Jurídico" style="height:48px; width:auto; border-radius:6px;" />
+      <strong style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif; font-size:1.05rem">
+        Estudio Jurídico
+      </strong>
+    </div>
+    <span class="badge"><span class="dot"></span> Atención prioritaria</span>
+  </div>
+  <h1>Formulario de Consulta Jurídica</h1>
+  <p class="sub">Complete el formulario y le contactaremos a la brevedad por el medio indicado. 
+    <span class="muted">Tiempo estimado: 1–2 minutos.</span>
+  </p>
+</header>
       <form id="consultaForm" method="POST" action="https://script.google.com/macros/s/GOOGLE_APPS_SCRIPT_URL_AQUI/exec" enctype="multipart/form-data" novalidate>
         <!-- Formspree config opcional -->
         <input type="hidden" name="_subject" value="Nueva consulta jurídica desde el sitio" />
@@ -267,3 +267,4 @@
   </script>
 </body>
 </html>
+
