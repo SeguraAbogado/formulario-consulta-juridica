@@ -88,7 +88,12 @@
         <p class="sub">Complete el formulario y le contactaremos a la brevedad por el medio indicado. <span class="muted">Tiempo estimado: 1–2 minutos.</span></p>
       </header>
 
-      <form id="consultaForm" method="POST" action="https://formspree.io/f/FORM_ID_AQUI" enctype="multipart/form-data" novalidate>
+      <form id="consultaForm" method="POST" action="https://script.google.com/macros/s/AKfycbxoclNLrIEJGEOQk2N8QfZkA7dPSIhk-As_sqrsrElNFVIefnMRLtqe7rolY9IzgMEK/exec" enctype="multipart/form-data" novalidate>
+        <!-- Formspree config opcional -->
+        <input type="hidden" name="_subject" value="Nueva consulta jurídica desde el sitio" />
+        <input type="hidden" name="_template" value="table" />
+        <!-- Si quieres copia a tu correo, cambia a tu email: -->
+        <!-- <input type="hidden" name="_cc" value="tucorreo@ejemplo.com" /> -->
         <!-- Anti‑spam honeypot -->
         <div class="honeypot" aria-hidden="true">
           <label>Si ves este campo, no lo llenes</label>
@@ -173,7 +178,8 @@
         <div>
           <label for="archivo">Adjuntar documento (opcional)</label>
           <input id="archivo" name="archivo" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.ppt,.pptx,.txt,.heic" />
-          <div class="hint">Máx. 10 MB (según proveedor). Si prefieres, podrás reenviarlo por WhatsApp o correo.</div>
+          <div class="hint">Nota: con la integración de Google Sheets vía Apps Script, los adjuntos no se envían automáticamente. Puedes solicitar documentos luego por WhatsApp o email.</div>
+        </div>
         </div>
 
         <div class="inline" style="margin-top:6px">
@@ -227,15 +233,21 @@
 
       // Si action está configurado con Formspree/Netlify, podemos enviar vía Fetch
       const endpoint = form.getAttribute('action');
-      if (!endpoint || endpoint.includes('FORM_ID_AQUI')) return; // deja que el navegador haga POST normal si no está configurado
+      if (!endpoint) return; // si no hay endpoint, deja envío normal
+
+      // Si es Google Apps Script, usamos FormData + no-cors para evitar problemas CORS
+      const isGAS = /script\.google\.com\/.+\/exec/.test(endpoint);
 
       e.preventDefault();
       const fd = new FormData(form);
+      fd.append('userAgent', navigator.userAgent || '');
+      fd.append('referrer', document.referrer || '');
 
       try{
-        const res = await fetch(endpoint, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
-        if (res.ok){
-          form.reset(); updateCount(); okBox.style.display = 'block';
+        const fetchOpts = isGAS ? { method: 'POST', body: fd, mode: 'no-cors' } : { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } };
+        await fetch(endpoint, fetchOpts);
+        form.reset(); updateCount(); okBox.style.display = 'block';
+        okBox.scrollIntoView({ behavior:'smooth', block:'center' });
           // Scroll hacia el mensaje
           okBox.scrollIntoView({ behavior:'smooth', block:'center' });
         } else {
