@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Consulta Jurídica – Contáctanos</title>
-  <meta name="description" content="Formulario rápid  o para consultas jurídicas. Déjanos tus datos y te contactaremos a la brevedad." />
+  <meta name="description" content="Formulario rápido para consultas jurídicas. Déjanos tus datos y te contactaremos a la brevedad." />
   <style>
     :root{
       --bg:#f5f7fb;           /* fondo claro profesional */
@@ -76,23 +76,19 @@
       <header>
         <div class="row" style="justify-content:space-between">
           <div class="logo">
-          <img src="./logo.png" alt="Logo Estudio Jurídico" style="height:48px; width:auto;" />
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 3v3m-6 2 3 6H3l3-6Zm12 0 3 6h-6l3-6ZM5 20h14M12 6c3 0 5 2 5 5v9M12 6C9 6 7 8 7 11v9"
-      stroke="#0b3b6f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  <strong style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif; font-size:1.05rem">
-    Estudio Jurídico
-  </strong>
-</div>
-
+            <!-- Escalas de la justicia -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3v3m-6 2 3 6H3l3-6Zm12 0 3 6h-6l3-6ZM5 20h14M12 6c3 0 5 2 5 5v9M12 6C9 6 7 8 7 11v9" stroke="#0b3b6f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <strong style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif; font-size:1.05rem">Estudio Jurídico</strong>
+          </div>
           <span class="badge"><span class="dot"></span> Atención prioritaria</span>
         </div>
         <h1>Formulario de Consulta Jurídica</h1>
         <p class="sub">Complete el formulario y le contactaremos a la brevedad por el medio indicado. <span class="muted">Tiempo estimado: 1–2 minutos.</span></p>
       </header>
 
-      <form id="consultaForm" method="POST" action="https://script.google.com/macros/s/AKfycbym3NqDbuntSRHMI4zbliuBW7z4by8d-rT18KTFOUibxQQCtHqe5QwIqt6ADB7C62XK/exec" enctype="multipart/form-data" novalidate>
+      <form id="consultaForm" method="POST" action="https://script.google.com/macros/s/GOOGLE_APPS_SCRIPT_URL_AQUI/exec" enctype="multipart/form-data" novalidate>
         <!-- Formspree config opcional -->
         <input type="hidden" name="_subject" value="Nueva consulta jurídica desde el sitio" />
         <input type="hidden" name="_template" value="table" />
@@ -175,15 +171,10 @@
 
         <div>
           <label for="descripcion">Cuéntanos tu caso <span class="req">*</span></label>
-          <textarea id="descripcion" name="descripcion" maxlength="1800" placeholder="Describe brevemente qué ocurrió, fechas clave y qué necesitas lograr. No incluyas datos sensibles si no es necesario." required></textarea>
+          <textarea id="descripcion" name="descripcion" maxlength="1800" placeholder="Describe brevemente qué ocurrió, fechas clave y qué necesitas lograr. No incluyas datos sensibles." required></textarea>
           <div class="charcount" id="cc">0 / 1800</div>
         </div>
 
-        <div>
-          <label for="archivo">Adjuntar documento (opcional)</label>
-          <input id="archivo" name="archivo" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.ppt,.pptx,.txt,.heic" />
-          <div class="hint">Nota: con la integración de Google Sheets vía Apps Script, los adjuntos no se envían automáticamente. Puedes solicitar documentos luego por WhatsApp o email.</div>
-        </div>
         </div>
 
         <div class="inline" style="margin-top:6px">
@@ -205,28 +196,31 @@
       </div>
     </div>
 
-    <p class="muted" style="text-align:center; margin:14px">¿Prefieres escribir directo por WhatsApp? <a href="https://wa.me/56900000000" target="_blank" rel="noopener" style="color:#86efac">Haz click aquí</a>.</p>
+    <p class="muted" style="text-align:center; margin:14px">¿Prefieres escribir directo por WhatsApp? <a href="https://wa.me/56965458180" target="_blank" rel="noopener" style="color:#86efac">Haz click aquí</a>.</p>
   </div>
 
   <script>
-    // Contador de caracteres
+    // --- Contador de caracteres ---
     const desc = document.getElementById('descripcion');
     const cc = document.getElementById('cc');
     const form = document.getElementById('consultaForm');
     const okBox = document.getElementById('okBox');
 
-    const updateCount = () => cc.textContent = `${desc.value.length} / ${desc.maxLength}`;
-    desc.addEventListener('input', updateCount); updateCount();
+    function updateCount(){
+      cc.textContent = `${desc.value.length} / ${desc.maxLength}`;
+    }
+    desc.addEventListener('input', updateCount);
+    updateCount();
 
-    // Validación: email O teléfono al menos uno
+    // --- Validación: email O teléfono al menos uno ---
     function hasEmailOrPhone(){
       const email = document.getElementById('email').value.trim();
       const tel = document.getElementById('telefono').value.trim();
       return email.length > 3 || tel.length > 6;
     }
 
-    // Envío con fetch (AJAX) + fallback
-    form.addEventListener('submit', async (e) => {
+    // --- Envío ---
+    form.addEventListener('submit', (e) => {
       // Honeypot
       if (form.company && form.company.value) { e.preventDefault(); return; }
 
@@ -236,47 +230,32 @@
         return;
       }
 
-      const endpoint = form.getAttribute('action');
-      if (!endpoint) return; // sin endpoint → POST normal
-
+      const endpoint = form.getAttribute('action') || '';
       const isGAS = /script\.google\.com\/.+\/exec/.test(endpoint);
 
-      // ⚠️ Para Google Apps Script dejamos el envío nativo del navegador.
-      // GAS responde con su propia página de "Gracias" y evita problemas CORS.
-      if (isGAS) {
-        // No prevenimos el envío; el navegador hará POST directo.
-        return;
-      }
+      // Con Google Apps Script dejamos envío nativo (sin AJAX)
+      if (isGAS) return;
 
-      // Para otros proveedores (ej. Formspree) usamos fetch + AJAX
+      // Si fuera otro proveedor (p.ej. Formspree), usamos fetch
       e.preventDefault();
       const fd = new FormData(form);
       fd.append('userAgent', navigator.userAgent || '');
       fd.append('referrer', document.referrer || '');
 
-      try{
-        const res = await fetch(endpoint, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
-        if (res.ok){
-          form.reset(); updateCount(); okBox.style.display = 'block';
-          okBox.scrollIntoView({ behavior:'smooth', block:'center' });
-        } else {
-          const data = await res.json().catch(()=>({}));
-          alert('No pudimos enviar tu consulta. Intenta nuevamente o contáctanos por WhatsApp.
-' + (data.message || ''));
-        }
-      } catch(err){
-        alert('Error de red. Intenta otra vez o usa WhatsApp.');
-      }
-    });
-          // Scroll hacia el mensaje
-          okBox.scrollIntoView({ behavior:'smooth', block:'center' });
-        } else {
-          const data = await res.json().catch(()=>({}));
-          alert('No pudimos enviar tu consulta. Intenta nuevamente o contáctanos por WhatsApp.\n' + (data.message || ''));
-        }
-      } catch(err){
-        alert('Error de red. Intenta otra vez o usa WhatsApp.');
-      }
+      fetch(endpoint, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } })
+        .then((res) => {
+          if (res.ok){
+            form.reset();
+            updateCount();
+            okBox.style.display = 'block';
+            okBox.scrollIntoView({ behavior:'smooth', block:'center' });
+          } else {
+            return res.json().then((data)=>{ throw new Error(data.message || ''); });
+          }
+        })
+        .catch(() => {
+          alert('No pudimos enviar tu consulta. Intenta nuevamente o contáctanos por WhatsApp.');
+        });
     });
   </script>
   <script>
@@ -288,6 +267,3 @@
   </script>
 </body>
 </html>
-
-
-
