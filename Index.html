@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Consulta Jurídica – Contáctanos</title>
+  <meta name="description" content="Formulario rápido para consultas jurídicas. Déjanos tus datos y te contactaremos a la brevedad." />
+  <style>
+    :root{
+      --bg:#0f172a;          /* slate-900 */
+      --card:#111827;        /* gray-900 */
+      --muted:#94a3b8;       /* slate-400 */
+      --text:#e5e7eb;        /* gray-200 */
+      --accent:#22c55e;      /* green-500 */
+      --accent2:#16a34a;     /* green-600 */
+      --danger:#ef4444;      /* red-500 */
+      --ring:#334155;        /* slate-700 */
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif;
+      background: radial-gradient(1200px 800px at 80% -10%, #1f2937 0%, #0b1220 60%, var(--bg) 100%);
+      color:var(--text);
+      line-height:1.5;
+    }
+    .wrap{max-width:820px; margin:24px auto; padding:16px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid #1f2937; border-radius:18px; box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      backdrop-filter: blur(6px);
+    }
+    header{padding:22px 20px 0}
+    h1{margin:0 0 6px; font-size: clamp(22px, 3.8vw, 32px)}
+    p.sub{margin:0 0 14px; color:var(--muted)}
+    form{padding: 8px 20px 20px}
+    .grid{display:grid; gap:14px}
+    @media(min-width:720px){.grid.cols-2{grid-template-columns:1fr 1fr}}
+    label{display:block; font-weight:600; margin:8px 0 6px}
+    .req{color:var(--accent); font-weight:700}
+    input[type="text"], input[type="tel"], input[type="email"], select, textarea{
+      width:100%; border:1px solid var(--ring); background:#0b1220; color:var(--text);
+      border-radius:12px; padding:12px 14px; outline:none; transition:.15s box-shadow,.15s border-color;
+    }
+    textarea{min-height:140px; resize:vertical}
+    input:focus, select:focus, textarea:focus{border-color:var(--accent); box-shadow:0 0 0 4px rgba(34,197,94,.15)}
+    .hint{font-size:.9rem; color:var(--muted)}
+    .row{display:flex; gap:10px; align-items:center}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:14px 18px; border-radius:14px; border:1px solid #14532d; background: linear-gradient(180deg, var(--accent), var(--accent2));
+      color:white; font-weight:700; cursor:pointer; width:100%;
+      box-shadow: 0 10px 20px rgba(22,163,74,.3); transition: transform .06s ease-in-out, filter .2s;
+    }
+    .btn:hover{filter:brightness(1.05)}
+    .btn:active{transform: translateY(1px)}
+    .muted{color:var(--muted)}
+    .inline{display:flex; gap:10px; align-items:center}
+    .foot{border-top:1px dashed #223049; padding:16px 20px 20px; color:var(--muted); font-size:.92rem}
+    .error{color:var(--danger); font-size:.92rem; margin-top:6px}
+    .charcount{font-size:.85rem; color:var(--muted); text-align:right; margin-top:6px}
+    .success{display:none; background:#052e1c; border:1px solid #14532d; color:#d1fae5; padding:14px; border-radius:12px; margin:16px 20px}
+    .badge{display:inline-block; background:#0b1220; color:#a7f3d0; border:1px solid #14532d; padding:4px 10px; border-radius:999px; font-size:.8rem}
+    .logo{display:flex; align-items:center; gap:10px; color:#bbf7d0}
+    .honeypot{position:absolute; left:-5000px; top:auto; width:1px; height:1px; overflow:hidden}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <div class="row" style="justify-content:space-between">
+          <div class="logo">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12c0-3.866 3.134-7 7-7a7 7 0 0 1 6.928 6.002M19 12a7 7 0 0 1-7 7 6.99 6.99 0 0 1-4.95-2.05" stroke="#86efac" stroke-width="1.75" stroke-linecap="round"/></svg>
+            <strong>Consulta Jurídica</strong>
+          </div>
+          <span class="badge">Respuesta prioritaria</span>
+        </div>
+        <h1>Descríbenos tu caso y déjanos tus datos</h1>
+        <p class="sub">Te contactaremos lo antes posible por el medio que prefieras. <span class="muted">Tiempo de llenado: 1–2 min.</span></p>
+      </header>
+
+      <form id="consultaForm" method="POST" action="https://formspree.io/f/FORM_ID_AQUI" enctype="multipart/form-data" novalidate>
+        <!-- Anti‑spam honeypot -->
+        <div class="honeypot" aria-hidden="true">
+          <label>Si ves este campo, no lo llenes</label>
+          <input type="text" name="company" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="grid cols-2">
+          <div>
+            <label for="nombre">Nombre y apellido <span class="req">*</span></label>
+            <input id="nombre" name="nombre" type="text" placeholder="Tu nombre completo" autocomplete="name" required />
+          </div>
+          <div>
+            <label for="ciudad">Ciudad / Región</label>
+            <input id="ciudad" name="ciudad" type="text" placeholder="Ej.: Valdivia, Los Ríos" autocomplete="address-level2" />
+          </div>
+        </div>
+
+        <div class="grid cols-2">
+          <div>
+            <label for="email">Correo electrónico</label>
+            <input id="email" name="email" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
+            <div class="hint">Requerimos <strong>email o WhatsApp</strong> (al menos uno).</div>
+          </div>
+          <div>
+            <label for="telefono">WhatsApp / Teléfono</label>
+            <input id="telefono" name="telefono" type="tel" placeholder="+56 9 1234 5678" autocomplete="tel" />
+          </div>
+        </div>
+
+        <div class="grid cols-2">
+          <div>
+            <label for="preferencia">¿Cómo prefieres que te contactemos? <span class="req">*</span></label>
+            <select id="preferencia" name="preferencia" required>
+              <option value="" selected disabled>Selecciona…</option>
+              <option>WhatsApp</option>
+              <option>Llamada</option>
+              <option>Email</option>
+            </select>
+          </div>
+          <div>
+            <label for="horario">Mejor horario para contactar</label>
+            <select id="horario" name="horario">
+              <option value="" selected>Indistinto</option>
+              <option>Mañana (9–12)</option>
+              <option>Tarde (12–18)</option>
+              <option>Noche (18–21)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid cols-2">
+          <div>
+            <label for="tipo">Tipo de consulta <span class="req">*</span></label>
+            <select id="tipo" name="tipo" required>
+              <option value="" selected disabled>Selecciona…</option>
+              <option>Familia (alimentos, tuición, divorcio)</option>
+              <option>Laboral (despido, finiquito, acoso)</option>
+              <option>Civil / Contratos</option>
+              <option>Penal</option>
+              <option>Consumo / SERNAC</option>
+              <option>Inmobiliario / Arriendo</option>
+              <option>Empresas / Tributario</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div>
+            <label for="urgencia">Nivel de urgencia</label>
+            <select id="urgencia" name="urgencia">
+              <option>Alta (plazos corriendo)</option>
+              <option selected>Media</option>
+              <option>Baja</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="descripcion">Cuéntanos tu caso <span class="req">*</span></label>
+          <textarea id="descripcion" name="descripcion" maxlength="1800" placeholder="Describe brevemente qué ocurrió, fechas clave y qué necesitas lograr. No incluyas datos sensibles si no es necesario." required></textarea>
+          <div class="charcount" id="cc">0 / 1800</div>
+        </div>
+
+        <div>
+          <label for="archivo">Adjuntar documento (opcional)</label>
+          <input id="archivo" name="archivo" type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.ppt,.pptx,.txt,.heic" />
+          <div class="hint">Máx. 10 MB (según proveedor). Si prefieres, podrás reenviarlo por WhatsApp o correo.</div>
+        </div>
+
+        <div class="inline" style="margin-top:6px">
+          <input id="acepto" name="acepto" type="checkbox" required />
+          <label for="acepto" style="margin:0">Acepto el <a href="#" class="muted" onclick="alert('Política de privacidad: tus datos se usan solo para gestionar tu consulta jurídica y no se comparten con terceros. Puedes solicitar su eliminación escribiendo a nuestro correo.'); return false;">aviso de privacidad</a> <span class="req">*</span></label>
+        </div>
+
+        <div class="foot">
+          <div class="row" style="justify-content:space-between; align-items:center">
+            <span class="muted">Este formulario no constituye asesoría legal. Te contactaremos para una evaluación inicial.</span>
+            <button type="submit" class="btn">Enviar mi consulta</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="success" id="okBox" role="status" aria-live="polite">
+        ✅ ¡Gracias! Tu consulta fue enviada. Te contactaremos a la brevedad por el medio elegido.
+      </div>
+    </div>
+
+    <p class="muted" style="text-align:center; margin:14px">¿Prefieres escribir directo por WhatsApp? <a href="https://wa.me/56900000000" target="_blank" rel="noopener" style="color:#86efac">Haz click aquí</a>.</p>
+  </div>
+
+  <script>
+    // Contador de caracteres
+    const desc = document.getElementById('descripcion');
+    const cc = document.getElementById('cc');
+    const form = document.getElementById('consultaForm');
+    const okBox = document.getElementById('okBox');
+
+    const updateCount = () => cc.textContent = `${desc.value.length} / ${desc.maxLength}`;
+    desc.addEventListener('input', updateCount); updateCount();
+
+    // Validación: email O teléfono al menos uno
+    function hasEmailOrPhone(){
+      const email = document.getElementById('email').value.trim();
+      const tel = document.getElementById('telefono').value.trim();
+      return email.length > 3 || tel.length > 6;
+    }
+
+    // Envío con fetch (AJAX) + fallback
+    form.addEventListener('submit', async (e) => {
+      // Honeypot
+      if (form.company && form.company.value) { e.preventDefault(); return; }
+
+      if (!hasEmailOrPhone()){
+        e.preventDefault();
+        alert('Ingresa al menos un medio de contacto: correo o WhatsApp/teléfono.');
+        return;
+      }
+
+      // Si action está configurado con Formspree/Netlify, podemos enviar vía Fetch
+      const endpoint = form.getAttribute('action');
+      if (!endpoint || endpoint.includes('FORM_ID_AQUI')) return; // deja que el navegador haga POST normal si no está configurado
+
+      e.preventDefault();
+      const fd = new FormData(form);
+
+      try{
+        const res = await fetch(endpoint, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
+        if (res.ok){
+          form.reset(); updateCount(); okBox.style.display = 'block';
+          // Scroll hacia el mensaje
+          okBox.scrollIntoView({ behavior:'smooth', block:'center' });
+        } else {
+          const data = await res.json().catch(()=>({}));
+          alert('No pudimos enviar tu consulta. Intenta nuevamente o contáctanos por WhatsApp.\n' + (data.message || ''));
+        }
+      } catch(err){
+        alert('Error de red. Intenta otra vez o usa WhatsApp.');
+      }
+    });
+  </script>
+</body>
+</html>
