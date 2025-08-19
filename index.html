@@ -7,120 +7,103 @@
   <meta name="description" content="Formulario rápido para consultas jurídicas. Déjanos tus datos y te contactaremos a la brevedad." />
   <style>
     :root{
-      --bg:#f5f7fb;           /* fondo claro profesional */
-      --card:#ffffff;         /* tarjeta blanca */
-      --muted:#475569;        /* slate-600 */
-      --text:#0f172a;         /* slate-900 */
-      --accent:#0b3b6f;       /* navy */
-      --accent2:#0a3563;      /* navy más oscuro */
-      --border:#e5e7eb;       /* gray-200 */
-      --danger:#b91c1c;       /* red-700 */
-      --ring:#cbd5e1;         /* slate-300 */
-      --gold:#b78727;         /* dorado discreto */
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --muted:#475569;
+      --text:#0f172a;
+      --accent:#0b3b6f;
+      --accent2:#0a3563;
+      --border:#e5e7eb;
+      --danger:#b91c1c;
+      --ring:#cbd5e1;
+      --gold:#b78727;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{
-      margin:0; font-family: system-ui,-apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
-      background: var(--bg);
-      color:var(--text);
-      line-height:1.55;
-    }
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans"; background:var(--bg); color:var(--text); line-height:1.55;}
     .wrap{max-width:820px; margin:32px auto; padding:16px}
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:14px; 
-      box-shadow: 0 10px 24px rgba(2,6,23,.06);
-    }
+    .card{background:var(--card); border:1px solid var(--border); border-radius:14px; box-shadow:0 10px 24px rgba(2,6,23,.06);}
     header{padding:22px 24px 0}
-    h1{margin:4px 0 6px; font-family: Georgia, Cambria, "Times New Roman", Times, serif; font-weight:700; letter-spacing:.1px; font-size: clamp(24px, 3.6vw, 34px)}
+    h1{margin:4px 0 6px; font-family:Georgia,Cambria,"Times New Roman",Times,serif; font-weight:700; font-size:clamp(24px,3.6vw,34px)}
     p.sub{margin:0 0 14px; color:var(--muted)}
-    form{padding: 8px 24px 24px}
+    form{padding:8px 24px 24px}
     .grid{display:grid; gap:14px}
     @media(min-width:720px){.grid.cols-2{grid-template-columns:1fr 1fr}}
     label{display:block; font-weight:600; margin:8px 0 6px; color:#0b1a33}
     .req{color:var(--gold); font-weight:700}
-    input[type="text"], input[type="tel"], input[type="email"], select, textarea{
+    input[type="text"],input[type="tel"],input[type="email"],select,textarea{
       width:100%; border:1px solid var(--ring); background:#fff; color:var(--text);
       border-radius:10px; padding:12px 14px; outline:none; transition:.15s box-shadow,.15s border-color;
     }
     textarea{min-height:140px; resize:vertical}
-    input:focus, select:focus, textarea:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(11,59,111,.15)}
+    input:focus,select:focus,textarea:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(11,59,111,.15)}
     .hint{font-size:.9rem; color:var(--muted)}
     .row{display:flex; gap:10px; align-items:center}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:10px;
-      padding:14px 18px; border-radius:10px; border:1px solid var(--accent2); background: linear-gradient(180deg, var(--accent), var(--accent2));
-      color:white; font-weight:700; cursor:pointer; width:100%;
-      box-shadow: 0 8px 18px rgba(11,59,111,.22); transition: transform .06s ease-in-out, filter .2s;
-    }
+    .btn{display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:14px 18px; border-radius:10px; border:1px solid var(--accent2); background:linear-gradient(180deg,var(--accent),var(--accent2)); color:white; font-weight:700; cursor:pointer; width:100%; box-shadow:0 8px 18px rgba(11,59,111,.22); transition:transform .06s ease-in-out, filter .2s;}
     .btn:hover{filter:brightness(1.03)}
-    .btn:active{transform: translateY(1px)}
+    .btn:active{transform:translateY(1px)}
     .muted{color:var(--muted)}
     .inline{display:flex; gap:10px; align-items:center}
     .foot{border-top:1px solid var(--border); padding:16px 24px 22px; color:var(--muted); font-size:.95rem}
     .error{color:var(--danger); font-size:.92rem; margin-top:6px}
     .charcount{font-size:.85rem; color:var(--muted); text-align:right; margin-top:6px}
-    .success{display:none; background:#eef6ff; border:1px solid #bfdbfe; color:#0b3b6f; padding:14px; border-radius:10px; margin:16px 24px}
     .badge{display:inline-flex; align-items:center; gap:8px; background:#f9fafb; color:#0f172a; border:1px solid var(--border); padding:6px 10px; border-radius:999px; font-size:.8rem}
     .logo{display:flex; align-items:center; gap:10px; color:var(--accent)}
     .honeypot{position:absolute; left:-5000px; top:auto; width:1px; height:1px; overflow:hidden}
     .seal{display:inline-flex; align-items:center; gap:8px; color:var(--accent)}
     .seal .dot{width:6px;height:6px;border-radius:999px;background:var(--gold)}
+
+    /* Overlay de éxito */
+    .overlay-ok{
+      position:fixed; inset:0; background:rgba(15,23,42,.75);
+      display:none; align-items:center; justify-content:center;
+      z-index:100;
+    }
+    .overlay-ok .box{
+      background:#fff; color:#0f172a; border-radius:14px; padding:28px 24px;
+      max-width:500px; text-align:center; box-shadow:0 10px 24px rgba(2,6,23,.18);
+    }
+    .overlay-ok h2{margin:0 0 10px; color:#0b3b6f;}
+    .overlay-ok p{margin:0 0 6px; color:#475569;}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <header>
-        <div class="row" style="justify-content:space-between">
-          <div class="logo">
-            <!-- Escalas de la justicia -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 3v3m-6 2 3 6H3l3-6Zm12 0 3 6h-6l3-6ZM5 20h14M12 6c3 0 5 2 5 5v9M12 6C9 6 7 8 7 11v9" stroke="#0b3b6f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <strong style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif; font-size:1.05rem">Estudio Jurídico</strong>
-          </div>
-          <span class="badge"><span class="dot"></span> Atención prioritaria</span>
-        </div>
-        <h1>Formulario de Consulta Jurídica</h1>
-        <p class="sub">Complete el formulario y le contactaremos a la brevedad por el medio indicado. <span class="muted">Tiempo estimado: 1–2 minutos.</span></p>
-      </header>
-
+  <div class="row" style="justify-content:space-between">
+    <div class="logo">
+      <!-- Logo de tu estudio -->
+      <img src="./logo.png" alt="Logo Estudio Jurídico" style="height:42px; width:auto; border-radius:6px;" />
+      <strong style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif; font-size:1.05rem">
+        Estudio Jurídico
+      </strong>
+    </div>
+    <span class="badge"><span class="dot"></span> Atención prioritaria</span>
+  </div>
+  <h1>Formulario de Consulta Jurídica</h1>
+  <p class="sub">
+    Complete el formulario y le contactaremos a la brevedad por el medio indicado.
+    <span class="muted">Tiempo estimado: 1–2 minutos.</span>
+  </p>
+</header>
       <form id="consultaForm" method="POST" action="https://script.google.com/macros/s/AKfycbym3NqDbuntSRHMI4zbliuBW7z4by8d-rT18KTFOUibxQQCtHqe5QwIqt6ADB7C62XK/exec" enctype="multipart/form-data" novalidate>
-        <!-- Formspree config opcional -->
         <input type="hidden" name="_subject" value="Nueva consulta jurídica desde el sitio" />
         <input type="hidden" name="_template" value="table" />
-        <!-- Si quieres copia a tu correo, cambia a tu email: -->
-        <!-- <input type="hidden" name="_cc" value="tucorreo@ejemplo.com" /> -->
-        <!-- Anti‑spam honeypot -->
-        <div class="honeypot" aria-hidden="true">
-          <label>Si ves este campo, no lo llenes</label>
-          <input type="text" name="company" tabindex="-1" autocomplete="off" />
-        </div>
+        <div class="honeypot"><label>Si ves este campo, no lo llenes</label><input type="text" name="company" tabindex="-1" autocomplete="off" /></div>
 
         <div class="grid cols-2">
-          <div>
-            <label for="nombre">Nombre y apellido <span class="req">*</span></label>
-            <input id="nombre" name="nombre" type="text" placeholder="Tu nombre completo" autocomplete="name" required />
-          </div>
-          <div>
-            <label for="ciudad">Ciudad / Región</label>
-            <input id="ciudad" name="ciudad" type="text" placeholder="Ej.: Valdivia, Los Ríos" autocomplete="address-level2" />
-          </div>
+          <div><label for="nombre">Nombre y apellido <span class="req">*</span></label><input id="nombre" name="nombre" type="text" required /></div>
+          <div><label for="ciudad">Ciudad / Región</label><input id="ciudad" name="ciudad" type="text" /></div>
         </div>
 
         <div class="grid cols-2">
           <div>
             <label for="email">Correo electrónico</label>
-            <input id="email" name="email" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
+            <input id="email" name="email" type="email" />
             <div class="hint">Requerimos <strong>email o WhatsApp</strong> (al menos uno).</div>
           </div>
-          <div>
-            <label for="telefono">WhatsApp / Teléfono</label>
-            <input id="telefono" name="telefono" type="tel" placeholder="+56 9 1234 5678" autocomplete="tel" />
-          </div>
+          <div><label for="telefono">WhatsApp / Teléfono</label><input id="telefono" name="telefono" type="tel" /></div>
         </div>
 
         <div class="grid cols-2">
@@ -128,18 +111,14 @@
             <label for="preferencia">¿Cómo prefieres que te contactemos? <span class="req">*</span></label>
             <select id="preferencia" name="preferencia" required>
               <option value="" selected disabled>Selecciona…</option>
-              <option>WhatsApp</option>
-              <option>Llamada</option>
-              <option>Email</option>
+              <option>WhatsApp</option><option>Llamada</option><option>Email</option>
             </select>
           </div>
           <div>
-            <label for="horario">Mejor horario para contactar</label>
+            <label for="horario">Mejor horario</label>
             <select id="horario" name="horario">
               <option value="" selected>Indistinto</option>
-              <option>Mañana (9–12)</option>
-              <option>Tarde (12–18)</option>
-              <option>Noche (18–21)</option>
+              <option>Mañana (9–12)</option><option>Tarde (12–18)</option><option>Noche (18–21)</option>
             </select>
           </div>
         </div>
@@ -149,128 +128,103 @@
             <label for="tipo">Tipo de consulta <span class="req">*</span></label>
             <select id="tipo" name="tipo" required>
               <option value="" selected disabled>Selecciona…</option>
-              <option>Familia (alimentos, tuición, divorcio)</option>
-              <option>Laboral (despido, finiquito, acoso)</option>
-              <option>Civil / Contratos</option>
-              <option>Penal</option>
-              <option>Consumo / SERNAC</option>
-              <option>Inmobiliario / Arriendo</option>
-              <option>Empresas / Tributario</option>
-              <option>Otro</option>
+              <option>Familia</option><option>Laboral</option><option>Civil</option><option>Penal</option><option>Consumo</option><option>Inmobiliario</option><option>Empresas</option><option>Otro</option>
             </select>
           </div>
           <div>
             <label for="urgencia">Nivel de urgencia</label>
             <select id="urgencia" name="urgencia">
-              <option>Alta (plazos corriendo)</option>
-              <option selected>Media</option>
-              <option>Baja</option>
+              <option>Alta</option><option selected>Media</option><option>Baja</option>
             </select>
           </div>
         </div>
 
         <div>
           <label for="descripcion">Cuéntanos tu caso <span class="req">*</span></label>
-          <textarea id="descripcion" name="descripcion" maxlength="1800" placeholder="Describe brevemente qué ocurrió, fechas clave y qué necesitas lograr. No incluyas datos sensibles si no es necesario." required></textarea>
+          <textarea id="descripcion" name="descripcion" maxlength="1800" required></textarea>
           <div class="charcount" id="cc">0 / 1800</div>
-        </div>
-
         </div>
 
         <div class="inline" style="margin-top:6px">
           <input id="acepto" name="acepto" type="checkbox" required />
-          <label for="acepto" style="margin:0">Acepto el <a href="#" class="muted" onclick="alert('Política de privacidad: tus datos se usan solo para gestionar tu consulta jurídica y no se comparten con terceros. Puedes solicitar su eliminación escribiendo a nuestro correo.'); return false;">aviso de privacidad</a> <span class="req">*</span></label>
+          <label for="acepto">Acepto el <a href="#" class="muted" onclick="alert('Política de privacidad: tus datos se usan solo para gestionar tu consulta.'); return false;">aviso de privacidad</a> <span class="req">*</span></label>
         </div>
 
         <div class="foot">
           <div class="row" style="justify-content:space-between; align-items:center">
-            <span class="muted">Este formulario no constituye asesoría legal. Te contactaremos para una evaluación inicial.</span>
-            <button type="submit" class="btn">Enviar mi consulta</button>
+            <span class="muted">Este formulario no constituye asesoría legal.</span>
+            <button type="submit" class="btn" id="submitBtn">Enviar mi consulta</button>
           </div>
         </div>
-        <input type="hidden" name="returnUrl" value="" id="returnUrlHidden" />
+        <input type="hidden" name="returnUrl" id="returnUrlHidden" />
       </form>
-
-      <div class="success" id="okBox" role="status" aria-live="polite">
-        ✅ ¡Tu consulta fue enviada!
-        <br><br>
-        La hemos recibido correctamente. Un abogado te contactará muy pronto por el medio indicado.
-        <br>
-        Puedes relajarte: ya estamos trabajando en tu caso.
-      </div>
     </div>
+    <p class="muted" style="text-align:center; margin:14px">¿Prefieres WhatsApp? <a href="https://wa.me/56965458180" target="_blank" rel="noopener" style="color:#16a34a">Haz click aquí</a>.</p>
+  </div>
 
-    <p class="muted" style="text-align:center; margin:14px">¿Prefieres escribir directo por WhatsApp? <a href="https://wa.me/56900000000" target="_blank" rel="noopener" style="color:#86efac">Haz click aquí</a>.</p>
+  <!-- Overlay éxito -->
+  <div class="overlay-ok" id="overlayOk">
+    <div class="box">
+      <h2>✅ ¡Gracias por tu consulta!</h2>
+      <p>La recibimos correctamente. Un abogado te contactará muy pronto.</p>
+      <p>Puedes relajarte: ya estamos trabajando en tu caso.</p>
+    </div>
   </div>
 
   <script>
-    // --- Contador de caracteres ---
-    const desc = document.getElementById('descripcion');
-    const cc = document.getElementById('cc');
-    const form = document.getElementById('consultaForm');
-    const okBox = document.getElementById('okBox');
+    const desc=document.getElementById('descripcion');
+    const cc=document.getElementById('cc');
+    const form=document.getElementById('consultaForm');
+    const submitBtn=document.getElementById('submitBtn');
+    const overlayOk=document.getElementById('overlayOk');
+    const COOLDOWN_MS=120000; // 2 min
 
-    function updateCount(){
-      cc.textContent = `${desc.value.length} / ${desc.maxLength}`;
-    }
-    desc.addEventListener('input', updateCount);
-    updateCount();
+    function updateCount(){cc.textContent=`${desc.value.length} / ${desc.maxLength}`;}
+    desc.addEventListener('input',updateCount);updateCount();
 
-    // --- Validación: email O teléfono al menos uno ---
     function hasEmailOrPhone(){
-      const email = document.getElementById('email').value.trim();
-      const tel = document.getElementById('telefono').value.trim();
-      return email.length > 3 || tel.length > 6;
+      return document.getElementById('email').value.trim().length>3 ||
+             document.getElementById('telefono').value.trim().length>6;
     }
-
-    // --- Envío ---
-    form.addEventListener('submit', async (e) => {
-      // Honeypot
-      if (form.company && form.company.value) { e.preventDefault(); return; }
-
-      if (!hasEmailOrPhone()){
-        e.preventDefault();
-        alert('Ingresa al menos un medio de contacto: correo o WhatsApp/teléfono.');
-        return;
+    function withinCooldown(){
+      const last=Number(localStorage.getItem('lastSubmitAt')||0);
+      return (Date.now()-last)<COOLDOWN_MS;
+    }
+    function applyCooldown(){
+      if(withinCooldown()){
+        submitBtn.disabled=true; submitBtn.textContent='Enviado ✓';
+        overlayOk.style.display='flex';
       }
+    }
+    applyCooldown();
 
-      e.preventDefault(); // siempre manejamos vía AJAX para mostrar mensaje en la misma página
+    let isSubmitting=false;
+    form.addEventListener('submit',async e=>{
+      if(form.company && form.company.value){e.preventDefault();return;}
+      if(!hasEmailOrPhone()){e.preventDefault();alert('Ingresa al menos un medio de contacto.');return;}
+      e.preventDefault();
+      if(isSubmitting||withinCooldown())return;
+      isSubmitting=true;
 
-      const endpoint = form.getAttribute('action') || '';
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const fd = new FormData(form);
-      fd.append('userAgent', navigator.userAgent || '');
-      fd.append('referrer', document.referrer || '');
+      submitBtn.disabled=true; submitBtn.textContent='Enviando…';
 
-      // Deshabilita botón mientras se envía
-      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Enviando…'; }
+      const fd=new FormData(form);
+      fd.append('userAgent',navigator.userAgent||'');
+      fd.append('referrer',document.referrer||'');
 
-      try {
-        // Para Google Apps Script usamos no-cors (no necesitamos leer la respuesta)
-        const fetchOpts = /script\.google\.com\/.+\/exec/.test(endpoint)
-          ? { method: 'POST', body: fd, mode: 'no-cors' }
-          : { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } };
-
-        await fetch(endpoint, fetchOpts);
-
-        // Éxito optimista (GAS no permite leer estado con no-cors)
-        form.reset();
-        updateCount();
-        okBox.style.display = 'block';
-        okBox.scrollIntoView({ behavior:'smooth', block:'center' });
-      } catch (err) {
-        alert('No pudimos enviar tu consulta. Intenta nuevamente o contáctanos por WhatsApp.');
-      } finally {
-        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Enviar mi consulta'; }
+      try{
+        await fetch(form.action,{method:'POST',body:fd,mode:'no-cors'});
+        localStorage.setItem('lastSubmitAt',String(Date.now()));
+        form.reset(); updateCount();
+        submitBtn.textContent='Enviado ✓';
+        overlayOk.style.display='flex';
+      }catch{
+        alert('No pudimos enviar tu consulta. Intenta nuevamente.');
+        submitBtn.disabled=false; submitBtn.textContent='Enviar mi consulta';
+        isSubmitting=false; return;
       }
     });
-  </script>
-  <script>
-    // Rellena automáticamente returnUrl con la URL actual del sitio para que el botón de "Volver" funcione
-    const ret = document.getElementById('returnUrlHidden');
-    if (ret && !ret.value) {
-      ret.value = location.href;
-    }
+    document.getElementById('returnUrlHidden').value=location.href;
   </script>
 </body>
 </html>
