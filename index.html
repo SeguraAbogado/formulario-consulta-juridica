@@ -74,26 +74,26 @@
   <div class="wrap">
     <div class="card">
       <header>
-  <div class="row" style="justify-content:space-between">
-    <div class="logo">
-      <img src="./logo.png" alt="Logo Estudio Jurídico" style="height:48px; width:auto; border-radius:6px;" />
-      <strong style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif; font-size:1.05rem">
-        Andrés Segura Stuardo - Abogado
-      </strong>
-    </div>
-    <span class="badge"><span class="dot"></span> Atención prioritaria</span>
-  </div>
-  <h1>Formulario de Consulta Jurídica</h1>
-  <p class="sub">Complete el formulario y le contactaremos a la brevedad por el medio indicado. 
-    <span class="muted">Tiempo estimado: 1–2 minutos.</span>
-  </p>
-</header>
-      <form id="consultaForm" method="POST" action="https://script.google.com/macros/s/GOOGLE_APPS_SCRIPT_URL_AQUI/exec" enctype="multipart/form-data" novalidate>
+        <div class="row" style="justify-content:space-between">
+          <div class="logo">
+            <!-- Escalas de la justicia -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3v3m-6 2 3 6H3l3-6Zm12 0 3 6h-6l3-6ZM5 20h14M12 6c3 0 5 2 5 5v9M12 6C9 6 7 8 7 11v9" stroke="#0b3b6f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <strong style="font-family: Georgia, Cambria, 'Times New Roman', Times, serif; font-size:1.05rem">Estudio Jurídico</strong>
+          </div>
+          <span class="badge"><span class="dot"></span> Atención prioritaria</span>
+        </div>
+        <h1>Formulario de Consulta Jurídica</h1>
+        <p class="sub">Complete el formulario y le contactaremos a la brevedad por el medio indicado. <span class="muted">Tiempo estimado: 1–2 minutos.</span></p>
+      </header>
+
+      <form id="consultaForm" method="POST" action="https://script.google.com/macros/s/AKfycbym3NqDbuntSRHMI4zbliuBW7z4by8d-rT18KTFOUibxQQCtHqe5QwIqt6ADB7C62XK/exec" enctype="multipart/form-data" novalidate>
         <!-- Formspree config opcional -->
         <input type="hidden" name="_subject" value="Nueva consulta jurídica desde el sitio" />
         <input type="hidden" name="_template" value="table" />
         <!-- Si quieres copia a tu correo, cambia a tu email: -->
-        <!-- <input type="hidden" name="_cc" value="contactoseguraabogado@gmail.com" /> -->
+        <!-- <input type="hidden" name="_cc" value="tucorreo@ejemplo.com" /> -->
         <!-- Anti‑spam honeypot -->
         <div class="honeypot" aria-hidden="true">
           <label>Si ves este campo, no lo llenes</label>
@@ -171,7 +171,7 @@
 
         <div>
           <label for="descripcion">Cuéntanos tu caso <span class="req">*</span></label>
-          <textarea id="descripcion" name="descripcion" maxlength="1800" placeholder="Describe brevemente qué ocurrió, fechas clave y qué necesitas lograr. No incluyas datos sensibles." required></textarea>
+          <textarea id="descripcion" name="descripcion" maxlength="1800" placeholder="Describe brevemente qué ocurrió, fechas clave y qué necesitas lograr. No incluyas datos sensibles si no es necesario." required></textarea>
           <div class="charcount" id="cc">0 / 1800</div>
         </div>
 
@@ -192,11 +192,15 @@
       </form>
 
       <div class="success" id="okBox" role="status" aria-live="polite">
-        ✅ ¡Gracias! Tu consulta fue enviada. Te contactaremos a la brevedad por el medio elegido.
+        ✅ ¡Tu consulta fue enviada!
+        <br><br>
+        La hemos recibido correctamente. Un abogado te contactará muy pronto por el medio indicado.
+        <br>
+        Puedes relajarte: ya estamos trabajando en tu caso.
       </div>
     </div>
 
-    <p class="muted" style="text-align:center; margin:14px">¿Prefieres escribir directo por WhatsApp? <a href="https://wa.me/56965458180" target="_blank" rel="noopener" style="color:#86efac">Haz click aquí</a>.</p>
+    <p class="muted" style="text-align:center; margin:14px">¿Prefieres escribir directo por WhatsApp? <a href="https://wa.me/56900000000" target="_blank" rel="noopener" style="color:#86efac">Haz click aquí</a>.</p>
   </div>
 
   <script>
@@ -220,7 +224,7 @@
     }
 
     // --- Envío ---
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       // Honeypot
       if (form.company && form.company.value) { e.preventDefault(); return; }
 
@@ -230,32 +234,35 @@
         return;
       }
 
+      e.preventDefault(); // siempre manejamos vía AJAX para mostrar mensaje en la misma página
+
       const endpoint = form.getAttribute('action') || '';
-      const isGAS = /script\.google\.com\/.+\/exec/.test(endpoint);
-
-      // Con Google Apps Script dejamos envío nativo (sin AJAX)
-      if (isGAS) return;
-
-      // Si fuera otro proveedor (p.ej. Formspree), usamos fetch
-      e.preventDefault();
+      const submitBtn = form.querySelector('button[type="submit"]');
       const fd = new FormData(form);
       fd.append('userAgent', navigator.userAgent || '');
       fd.append('referrer', document.referrer || '');
 
-      fetch(endpoint, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } })
-        .then((res) => {
-          if (res.ok){
-            form.reset();
-            updateCount();
-            okBox.style.display = 'block';
-            okBox.scrollIntoView({ behavior:'smooth', block:'center' });
-          } else {
-            return res.json().then((data)=>{ throw new Error(data.message || ''); });
-          }
-        })
-        .catch(() => {
-          alert('No pudimos enviar tu consulta. Intenta nuevamente o contáctanos por WhatsApp.');
-        });
+      // Deshabilita botón mientras se envía
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Enviando…'; }
+
+      try {
+        // Para Google Apps Script usamos no-cors (no necesitamos leer la respuesta)
+        const fetchOpts = /script\.google\.com\/.+\/exec/.test(endpoint)
+          ? { method: 'POST', body: fd, mode: 'no-cors' }
+          : { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } };
+
+        await fetch(endpoint, fetchOpts);
+
+        // Éxito optimista (GAS no permite leer estado con no-cors)
+        form.reset();
+        updateCount();
+        okBox.style.display = 'block';
+        okBox.scrollIntoView({ behavior:'smooth', block:'center' });
+      } catch (err) {
+        alert('No pudimos enviar tu consulta. Intenta nuevamente o contáctanos por WhatsApp.');
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Enviar mi consulta'; }
+      }
     });
   </script>
   <script>
@@ -267,5 +274,3 @@
   </script>
 </body>
 </html>
-
-
