@@ -193,6 +193,7 @@
             <button type="submit" class="btn">Enviar mi consulta</button>
           </div>
         </div>
+        <input type="hidden" name="returnUrl" value="" id="returnUrlHidden" />
       </form>
 
       <div class="success" id="okBox" role="status" aria-live="polite">
@@ -231,23 +232,38 @@
         return;
       }
 
-      // Si action está configurado con Formspree/Netlify, podemos enviar vía Fetch
       const endpoint = form.getAttribute('action');
-      if (!endpoint) return; // si no hay endpoint, deja envío normal
+      if (!endpoint) return; // sin endpoint → POST normal
 
-      // Si es Google Apps Script, usamos FormData + no-cors para evitar problemas CORS
       const isGAS = /script\.google\.com\/.+\/exec/.test(endpoint);
 
+      // ⚠️ Para Google Apps Script dejamos el envío nativo del navegador.
+      // GAS responde con su propia página de "Gracias" y evita problemas CORS.
+      if (isGAS) {
+        // No prevenimos el envío; el navegador hará POST directo.
+        return;
+      }
+
+      // Para otros proveedores (ej. Formspree) usamos fetch + AJAX
       e.preventDefault();
       const fd = new FormData(form);
       fd.append('userAgent', navigator.userAgent || '');
       fd.append('referrer', document.referrer || '');
 
       try{
-        const fetchOpts = isGAS ? { method: 'POST', body: fd, mode: 'no-cors' } : { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } };
-        await fetch(endpoint, fetchOpts);
-        form.reset(); updateCount(); okBox.style.display = 'block';
-        okBox.scrollIntoView({ behavior:'smooth', block:'center' });
+        const res = await fetch(endpoint, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
+        if (res.ok){
+          form.reset(); updateCount(); okBox.style.display = 'block';
+          okBox.scrollIntoView({ behavior:'smooth', block:'center' });
+        } else {
+          const data = await res.json().catch(()=>({}));
+          alert('No pudimos enviar tu consulta. Intenta nuevamente o contáctanos por WhatsApp.
+' + (data.message || ''));
+        }
+      } catch(err){
+        alert('Error de red. Intenta otra vez o usa WhatsApp.');
+      }
+    });
           // Scroll hacia el mensaje
           okBox.scrollIntoView({ behavior:'smooth', block:'center' });
         } else {
@@ -259,7 +275,12 @@
       }
     });
   </script>
+  <script>
+    // Rellena automáticamente returnUrl con la URL actual del sitio para que el botón de "Volver" funcione
+    const ret = document.getElementById('returnUrlHidden');
+    if (ret && !ret.value) {
+      ret.value = location.href;
+    }
+  </script>
 </body>
 </html>
-
-
